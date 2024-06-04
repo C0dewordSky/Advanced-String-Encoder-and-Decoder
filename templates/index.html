@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Encoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cipher Encoder</h1>
+        <input type="text" id="message" placeholder="Enter message" required>
+        <input type="text" id="key" placeholder="Enter key" required>
+        <button onclick="encryptMessage()">Encrypt</button>
+        <button onclick="decryptMessage()">Decrypt</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function encryptMessage() {
+            const message = document.getElementById('message').value;
+            const key = document.getElementById('key').value;
+
+            fetch('/encrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message, key: key })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = `Encrypted Message: ${data.result}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function decryptMessage() {
+            const message = document.getElementById('message').value;
+            const key = document.getElementById('key').value;
+
+            fetch('/decrypt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: message, key: key })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = `Decrypted Message: ${data.result}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
